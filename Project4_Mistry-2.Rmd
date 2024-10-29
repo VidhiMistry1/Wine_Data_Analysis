@@ -1,0 +1,337 @@
+---
+title:  'Mistry_Project4.R'
+output: html_document
+---
+<P><BR><CENTER><FONT SIZE="4.5">
+<b>M4 Project4 Mistry</FONT></b>
+<BR>Name: Vidhi Rajeshbhai Mistry
+<BR>Class: ALY6000 Introduction to Analytics
+<BR>Instructor: Dr. Dee Chiluiza, PhD
+<BR>Date: 15th October 2023</BR>
+</CENTER></P>
+<BR><b> 
+INTRODUCTION
+</b></BR>
+<BR>
+1. Importance and practical applications of descriptive statistics.
+Importance: Descriptive statistics plays a vital role in data visualization. It makes easy  to understand the data and its pattern in simpler ways by reducing guesswork. [1]
+Practical applications of descriptive statistics: [2]
+Descriptive statistics has applications in multiple fields:
+a. Science and engineering
+b. Business and economics
+c. Agriculture
+d. Astronomy
+<BR>
+2. Practical applications of R for Data analysis
+<BR>a. Finance: R is essentially used in finance companies to calculate the risk factor. However, risk management not only includes risk factor calculations but also a deeper analysis of the process and risk prevention using various analysis methods. [3]
+<BR>b. Weather: R can be helpful in predictive analysis for weather prediction in natural calamity prone areas. This helps in taking preventive measures in well-advance i.e. forecasting< of calamity occurring. [3]
+<BR>c. Insurance: It can assist in predicting and analyzing the number of individuals purchasing insurance and covering their life, how to target remote areas for insurance and increase business. It can also prove beneficial in designing policies as per the desired salary brackets of individuals. [4]
+<BR>d. Medicine/Medical/Healthcare: With the help of R, it is possible to predict and analyse probabilities of certain diseases occurring, based on past events. This can help create a cure and in turn an awareness of the disease. [4]
+<BR>
+ 3. Basic information of the industry and the importance of the variables alcohol and magnesium
+<BR>
+Wine industry is diverse and includes number of processes. From cultivation of grapes to its aging, every process is carried out carefully. However, besides grapes, there are multiple other variables involved to make wine more traditional and taste-effective. Two such variables are alcohol content and magnesium level in wine making. [5]
+<BR>
+Alcohol content: To sum up wine with alcohol content is a task as alcohol affects the central nervous system of the human body without deviation. Hence, to make wine taste-effective, alcohol content typically ranges from 10% to 15% depending upon the type of wine. It is made sure that final liquid is made keeping in mind health style and customer expectations. [6]
+<BR>
+Magnesium level: Magnesium naturally comes from grapes and has acidic nature. This affects pH level of the wine. However, magnesium content depends on the type of soil and vineyard type. Hence, process ensures suitable amount of minerals are obtained too get the desired quality of wine. [6]
+</BR> 
+<BR>
+Below libraries and data are used in this project:
+</BR>
+```{r}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(RColorBrewer)
+library(magrittr)
+library(readxl)
+
+library(readxl)
+wineType <- read_excel("C:/Users/Latitude3160/Documents/ALY6000 rProject/week 4/wineType.xlsx")
+```
+<BR><b> 
+ANALYSIS
+</b></BR>
+<BR> 
+<b>Task 1: Brief view of the wine data</b>
+<BR>Description: To get the basic structure of the given data set, code glimpse() is utilized to know the characters, doubles and logical values are involved.
+</BR>
+```{r}
+glimpse(wineType)
+```
+<BR>
+Observation/s: With the help of code glimpse(), it shows thaat one charactor wine type has multiple contents in it i.e. double(having numeric value). A basic structure of the data is being portrayed here. It can be observed that wine type is the character and other contents like alcohol, Malic acid, Ash, etc are doubles; having numeric value. 
+</BR>
+<BR> 
+<b>Task 2: Renaming Wine_type as "Region" and obtaining glimpse of the new data</b>
+<BR>Description: We are renaming the character "Wine_type" to "Region". This would change wine_type 1,2 and 3 into Region 1,2 and 3 respectively.
+</BR>
+```{r}
+wine2 = wineType %>%
+  rename(Region = Wine_Type)
+
+glimpse(wine2)
+```
+<BR>
+Observation/s: As observed, "Wine_type" changed/renamed as "Region". Wherein, Wine type 1, Wine type 2, Wine type 3 is now renamed as Region 1, Region 2 and Region 3 respectively. Furthermore, a brief look at the new data can be taken where new character is "Region". 
+</BR>
+<BR> 
+<b>TASK 3: Creating a box plot for the alcohol distribution</b>
+<BR>Description: Boxplot will show the median ,quartiles and inter quartile range of the data.
+</BR>
+```{r}
+ggplot(wine2, aes(x = Region, y = Alcohol)) +
+  geom_boxplot() +
+  labs(title = "Alcohol Distribution by Region")
+```
+<BR>
+Observation/s: From the boxplot presented, it can be clearly understood that the Inter Quartile Range of region 3 for alcohol distribution is higher. Wherein, Region 2 has comapratively lesser Inter Quartile Range, followed  by Region 1 and Region 3. Outliers can be spotted in Region 2 making it an exceptional wine. The highest content of alcohol is found in Region 3, wines having significantly higher amount of alcohol as comapred Region 1 and Region 2. It also shows that customer prefer high alcohol-content wine in Region 3. 
+</BR>
+<BR> 
+<b>Task 4: Obtaining mean Alcohol of the data set</b>
+<BR>Description: Mean of alcohol content in regions is calculated here. 
+</BR>
+```{r}
+global_mean_alcohol = wine2 %>%
+  summarise(mean_alcohol = mean(Alcohol))
+
+print(global_mean_alcohol)
+```
+<BR> 
+<b>Task 5: Summarizing the data</b>
+<BR>Description: Mean of alcohol content in regions does not seem to be the sufficient information to mske further analysis. Hence, this task is an attempt to group the regions in 3 parts. 
+</BR>
+```{r}
+wine2_group = wine2 %>%
+  group_by(Region)
+
+means_per_region = wine2_group %>%
+  summarize(mean_alcohol = mean(Alcohol))
+
+summarise(wine2_group)
+
+table1 = means_per_region %>%
+  kable(align = c("l", "c"), table.attr = "style='width:40%;'")
+
+library(kableExtra)
+kable_classic_2(
+  table1,
+  lightable_options = "basic",
+  html_font = "\"Arial Narrow\", \"Source Sans Pro\", sans-serif",
+)
+```
+<BR>
+Observation/s: Task 4 shows mean alcohol content as 13.37792. Task 5 shows mean of Region 1, Region 2 and Region 3. Table shows respective values of mean of Region 1, Region 2 and Region 3 as 13.74898, 11.18469 and 16.16596 respectively. Region 3 has the highest alcohol content and Region 1 has the lowest alcohol content.
+</BR>
+<BR> 
+<b>Task 6: Summarizing the data with the code tapply()</b>
+<BR>Description: This task shows the same result as of task 5 but with the code tapply(). 
+</BR>
+```{r}
+means_per_region = tapply(wine2$Alcohol, wine2$Region, mean)
+
+kable(means_per_region)
+```
+<BR>
+Observation/s: A simpler table is obtained for means(alcohol content) per region. Observattions go same as Task 4. Task 5 shows mean alcohol content as 13.37792. Task 5 shows mean of Region 1, Region 2 and Region 3. Table shows respective values of mean of Region 1, Region 2 and Region 3 as 13.74898, 11.18469 and 16.16596 respectively. Region 3 has the highest alcohol content and Region 1 has the lowest alcohol content. 
+</BR>
+<BR> 
+<b>Task 7: Fixing the categoy names</b>
+<BR>Description: Region 1, Region 2 and Region 3 corresponds to 3 diifferent states inthe country. This taskk aims to fix the names of regions with actual state names with the help of codes mutate() and recode().
+</BR>
+```{r}
+wine3 = wine2 %>%
+  mutate(Region = recode(Region,
+    "Region 1" = "California",
+    "Region 2" = "Colorado",
+    "Region 3" = "Massachusetts")) 
+```
+<BR>
+Observation/s: Task outcome is that Region 1 is named as California, Region 2 as Colorado and Region 3 as Massachusetts.
+</BR>
+<BR> 
+<b>Task 8: Creating region wise table and histogram for mean proline content </b>
+<BR>Description: This task focuses on calculating average proline on the basis of regions i.e now states viz. California, Colorado and Massachusetts. For deeper analysis, histogram has been created.
+</BR>
+```{r}
+wine3 %>% 
+  group_by(Region) %>%
+  summarise(Average_Proline = mean(Proline, na.rm = TRUE, digits=1))
+
+kable(wine3, format = "html", caption = "Average Proline per Region", align = "c") %>%
+  kable_styling("striped", full_width = FALSE)
+
+wine3 %>%
+  ggplot(aes(x = Proline)) +
+  geom_histogram(binwidth = 50, fill = "pink", color = "black") +
+  facet_wrap(~Region, scales = "free") +
+  labs(
+    title = "Proline Distribution by Region",
+    x = "Proline",
+    y = "Frequency")
+```
+<BR>
+Observation/s:  <BR>
+Task 8 A:Table shows average proline content in the wine in California, Colorado and Massachusetts. California has the highest proline content wherein Colorado has the lowest. Massachusetts having slighlt higher proline as compared to Colorado. For higher clarity, histogram of all the three states is presented. Histograms show respective average proline on X-axis for three states and frequency distribution of the same on Y-axis. It can be unnderstood that graph is slightly skewed negatively for average proline in California. The same is positively skewed for average proline in Colorado. The histogram is roughly symmetrical for Massachusetts. </BR>
+```{r}
+library(lattice)
+histogram(
+  ~ Proline | Region,
+  data = wine3,
+  layout = c(3,1),
+  breaks = 8,
+  col = "turquoise",
+  xlab = "Proline",
+  ylab = "Frequency",
+  main = "Proline Distribution by Region"
+)
+```
+<BR>
+Task 8 B: This task is carried out with a new library "lattice". It is an enhanced graphical representation of the histograms presented in Task 8 A. 
+</BR>
+<BR> 
+<b>Task 9: Counting the observations per given categories</b>
+<BR>Description: This task specifically aims to count total number of observations in each region.
+</BR>
+```{r}
+unique(wine3$Region)
+
+table(wine3$Region)
+
+wine3 %>%
+  count(Region) %>%
+  as.matrix() %>%
+  kable(format = "html", caption = "Observations per Region", align = "c") %>%
+  kable_styling("bordered") %>%
+  kable_classic_2(wine3, lightable_options = "basic",
+  html_font = "\"Arial Narrow\", \"Source Sans Pro\", sans-serif")
+```
+<BR>
+Observation/s: Initially  a simple table is presented showing total counts per region i.e. California recording 59 observations, Colorado counts 71 the lowest oobservations recorded in Massachusetts.  A better presentation of this table is made, with a new code kable_classic_2(). 
+</BR>
+<BR> 
+<b>Task 10: Organizing data into several classes </b>
+<BR>Description: This task specifically focuuses on oraganizing the data in three classes as it is a continuous data.
+</BR>
+```{r}
+low_magnesium = wine3 %>%
+  filter(Magnesium < 100)
+
+medium_magnesium = wine3 %>%
+  filter(Magnesium >= 100, Magnesium <= 130)
+
+high_magnesium = wine3 %>%
+  filter(Magnesium > 130)
+
+middle_magnesium = wine3 %>%
+  filter(between(Magnesium, 100, 130))
+
+n_low_magnesium = nrow(low_magnesium)
+n_medium_magnesium = nrow(medium_magnesium)
+n_high_magnesium = nrow(high_magnesium)
+n_middle_magnesium = nrow(middle_magnesium)
+
+total_observations = nrow(wine3)
+
+total_observations == n_low_magnesium + n_medium_magnesium + n_high_magnesium
+
+frequency_table = data.frame(
+  Class = c("Low Magnesium", "Medium Magnesium", "High Magnesium", "Middle Magnesium"),
+  Frequency = c(n_low_magnesium, n_medium_magnesium, n_high_magnesium, n_middle_magnesium)
+)
+
+print(frequency_table)
+
+magnesium_frequencies = c(
+  n_low_magnesium,
+  n_medium_magnesium,
+  n_high_magnesium
+)
+
+labels = c("Low Magnesium", "Medium Magnesium", "High Magnesium")
+
+pie(magnesium_frequencies, labels = labels, main = "Magnesium Data")
+
+legend("topright", legend = labels, fill = rainbow(length(labels)))
+
+barplot(magnesium_frequencies, names.arg = labels, main = "Magnesium Data",
+        col = c("cyan", "aquamarine", "turquoise"), border = "black", ylab = "Frequency of Magnesium", ylim = c(0, max(magnesium_frequencies) + 10))
+
+row_labels = c("Low Magnesium", "Medium Magnesium", "High Magnesium")
+magnesium_matrix = matrix(data = magnesium_frequencies, nrow = 3, byrow = TRUE)
+rownames(magnesium_matrix) = row_labels
+print(magnesium_matrix)
+
+kable(magnesium_matrix, 
+      format = "html",
+      table.attr = "style='width:40%;'")
+```
+<BR>
+Observation/s: Magnesium is now broadly classified into three classes viz. low magnesium, medium magnesium and high magnesium as 97, 75 and 6 respectively. Furthermore, for additional observation middle magnesium has also been calculated as 75. The same is displayed in the table. From the pie chart and bar chart created, it is noted that high magnesium has the lowest frequency of 6; wherein low magnesium has the highest frequency of 97. Medium magnesium being slightly lesser than high frequency i.e. 75. This makes bar chart with a positive skew. A very small customer segment prefers high magnesium wine. On the other hand, most of the customers prefers low magnesium wine. 
+</BR>
+<BR> 
+<b>Task 11: Analyzing region wise distribution of magnesium level</b>
+<BR>Description: This task aims to find out magnesium level distribution in California, Colorado aand Massachusetts 
+</BR>
+```{r}
+table_low_magnesium = table(low_magnesium$Region)
+table_medium_magnesium = table(medium_magnesium$Region)
+table_high_magnesium = table(high_magnesium$Region)
+
+print("Frequency Table for Low Magnesium:")
+print(table_low_magnesium)
+
+print("Frequency Table for Medium Magnesium:")
+print(table_medium_magnesium)
+
+print("Frequency Table for High Magnesium:")
+print(table_high_magnesium)
+
+combined_table = bind_rows(
+  "Low Magnesium" = table_low_magnesium,
+  "Medium Magnesium" = table_medium_magnesium,
+  "High Magnesium" = table_high_magnesium
+)
+
+combined_table_df = as.data.frame(combined_table)
+
+combined_table_df$Magnesium_Level = c("Low", "Medium", "High")
+
+kable(combined_table_df, format = "html", caption = "Combined Frequency Table", align = "c")
+
+options(knitr.kable.NA = '0')
+
+kable(combined_table_df, format = "html", caption = "Combined Frequency Table", align = "c") %>%
+  kable_styling("bordered") %>%
+  kable_classic_2(lightable_options = "basic",
+                  html_font = "\"Arial Narrow\", \"Source Sans Pro\", sans-serif")
+```
+<BR>
+Observation/s: It is briefly observed that Colorado has the customer section with low magnesium content wine. Massachusetts followed by Colorado has the second highest customer segment and California being the lowest in low magnesium wine. California on the other hand has the highest customer chunk for medium level magnesium wine; Massachusetts and Colorado followed thereafter. As previously learned, high magnesium wine has a very acute customer base and Colorado has highest of all, and California has the lowest. Massachusetts has none preferring high magnesium level wine. 
+</BR>
+<BR><b> 
+CONCLUSION
+</b></BR>
+<BR>
+This project mainly focused on magnesium level distribution in wine and its consumption in different states. As wine comprises of multiple variables to make it mouthful. While performing the analysis, a clear insight is delivered on wine consumption in regard to different magnesium levels. It also provides a knowledge on various customer segment and their wine preference. The data has numerous other variables in wine and this can help us find out consumption of specific wine in different regions. Hence, this could be a potential area of study to get a more clear picture on the data. <BR>
+Similar to magnesium, proline is one of the variable and part of wine making process. Project also puts a gleam on average proline content in wine in California, Colorado and Massachusetts. California has the highest customer segment to consume high proline content wine. While, Colorado has the lowest. Here, as proline is present in grape juice and naturally inhibits good characteristic of supporting immune system, this can be furthermore put into study to discover the reason of less consumption of wine with proline content in Colorado and Massachusetts. <BR>
+In the process of project preparation,  by describing each task then writing codes and running the same, multiple new skills were learned and which in turn assisted in listing down meaningful insights of the respective tasks and project. New library named "lattice" contributed towards a better visualization of the graphs and data.  
+</BR>
+<BR><b> 
+REFERENCES
+</b></BR>
+<BR>
+[1] Sir Ronald Aylmer Fisher, 2009, "Descriptive Statistics", https://booksite.elsevier.com/samplechapters/9780123748485/Sample_Chapters/02~Chapter_1.pdf
+<BR>
+[2] Dong Yihang, 2023, "Descriptive Statistics and Its Applications", file:///C:/Users/Latitude3160/Downloads/Descriptive_Statistics_and_Its_Applications.pdf 
+<BR>
+[3] Miller Stephen, 2021, "What Is R Used For?", https://www.codecademy.com/resources/blog/what-is-r-used-for/
+<BR>
+[4] Dong Yihang, 2023, "Descriptive Statistics and Its Applications", file:///C:/Users/Latitude3160/Downloads/Descriptive_Statistics_and_Its_Applications.pdf
+<BR>
+[5] Hrelia Silvana, Di Renzo Laura, Bavaresco Luigi, Bernardi Elisabetta, Malaguti Marco, and Giacosa Attilio, 2022, "Moderate Wine Consumption and Health: A Narrative Review", https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9824172/
+<BR>
+[6] Bonin Sylwia, 2014, "Effects of magnesium ions on both VHG batch and continuous fruit wine fermentations", https://onlinelibrary.wiley.com/doi/full/10.1002/jib.170
+</BR>
