@@ -3,11 +3,7 @@ title:  'Mistry_Project4.R'
 output: html_document
 ---
 <P><BR><CENTER><FONT SIZE="4.5">
-<b>M4 Project4 Mistry</FONT></b>
-<BR>Name: Vidhi Rajeshbhai Mistry
-<BR>Class: ALY6000 Introduction to Analytics
-<BR>Instructor: Dr. Dee Chiluiza, PhD
-<BR>Date: 15th October 2023</BR>
+<BR>Name: Vidhi Rajeshbhai Mistry</BR>
 </CENTER></P>
 <BR><b> 
 INTRODUCTION
